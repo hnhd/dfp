@@ -33,5 +33,9 @@ usa_dfp_map(states_data, color_value, alpha_value = NULL, title = NULL,
 Plot Data for Progress specified USA map.
 }
 \examples{
-usa_dfp_map(states_data = mc_trump_approval, color_value = "trump_approval_april", alpha_value = NULL, title = "Trump Approval Rating", subtitle = NULL, font = "Montserrat", color_scheme = "orange_to_green", limits = c(0.2, 0.8), save_plot = TRUE, output_folder = NULL)
+usa_dfp_map(states_data = mc_trump_approval, 
+color_value = "trump_approval_april", alpha_value = NULL, 
+title = "Trump Approval Rating", subtitle = NULL, 
+font = "Montserrat", color_scheme = "orange_to_green", limits = c(0.2, 0.8), 
+save_plot = TRUE, output_folder = NULL)
 }

@@ -4,6 +4,11 @@
 #' @param scale_by_total Scale your graph by all tweets by the Senator. Defaults to FALSE, which outputs tweet counts.
 #' @param save_local Save the graph to your working directory. Defaults to FALSE.
 #' @export
+#' 
+issue_terms = "gaza"
+tweet_database = senator_tweets_final
+scale_by_total=FALSE
+save_local=FALSE
 
 issue_bargraph <- function(issue_terms, tweet_database, scale_by_total=FALSE, save_local=FALSE) { 
   

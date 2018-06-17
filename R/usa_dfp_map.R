@@ -63,11 +63,13 @@ prelim_fix <- function(object, params){
 #' @param save_plot Saves plot if TRUE. Defaults to FALSE, which only displays the plot. 
 #' @param output_folder Output folder destination. Defaults to NULL, which outputs in the same folder.
 #' @examples
-#' usa_dfp_map(states_data = mc_trump_approval, 
-#' color_value = "trump_approval_april", alpha_value = NULL, 
-#' title = "Trump Approval Rating", subtitle = NULL, 
-#' font = "Montserrat", color_scheme = "orange_to_green", limits = c(0.2, 0.8), 
-#' save_plot = TRUE, output_folder = NULL)
+#' usa_dfp_map(
+#'     states_data = mc_trump_approval, 
+#'     color_value = "trump_approval_april", alpha_value = NULL, 
+#'     itle = "Trump Approval Rating", subtitle = NULL, 
+#'     font = "Montserrat", color_scheme = "orange_to_green", limits = c(0.2, 0.8), 
+#'     save_plot = TRUE, output_folder = NULL
+#' )
 #' @export
 
 usa_dfp_map <- function(
@@ -181,7 +183,8 @@ usa_dfp_map <- function(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank()
     )
-
+  
+  if(save_plot){print(plot)}
   if(save_plot){png(filename = paste0(if(is.null(output_folder)){""}else{paste0(output_folder, "/")}, color_value, ".png"), width = 750, height = 600, units = "px")}
   print(plot)
   if(save_plot){dev.off()}

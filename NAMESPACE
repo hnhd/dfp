@@ -3,4 +3,5 @@
 export(append_dfp_branding)
 export(issue_bargraph)
 export(load_census_fips)
+export(twitter_analysis)
 export(usa_dfp_map)

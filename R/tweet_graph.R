@@ -1,11 +1,9 @@
-#' Plot Data for Progress specified tweet graphs.
+#' Pivot the Twitter data. 
 #' @param issue_terms Search term or terms. Takes input as a vector. 
 #' @param tweet_database Tweet database. Must have the columns "last_name", "party", "state" and "tweet".
 #' @param scale_by_total Scale your graph by all tweets by the Senator. Defaults to FALSE, which outputs tweet counts.
-#' @param save_local Save the graph to your working directory. Defaults to FALSE.
-#' @export
 
-issue_bargraph <- function(issue_terms, tweet_database, scale_by_total=FALSE, save_local=FALSE) { 
+pivot_twitter_data <- function(issue_terms, tweet_database, scale_by_total=FALSE){
   
   # add a flag to mark if the tweet exists (used to scale by total)
   tweet_database$tweet_exists <- TRUE
@@ -24,22 +22,59 @@ issue_bargraph <- function(issue_terms, tweet_database, scale_by_total=FALSE, sa
     ifelse(issue_data$party == "Democrat", "D", 
     ifelse(issue_data$party == "Republican", "R",
     ifelse(issue_data$party == "Independent", "I", "")))
-    
+  
   # if scaling by total, add a scale mentions column 
+  # pivot the data to show all tweets
+  tweet_counts <- tweet_database %>%
+    dcast(last_name+party~"total_tweets", value.var = "tweet_exists", fun.aggregate = sum)
+  
   if(scale_by_total) {
-    # pivot the data to show all tweets
-    tweet_counts <- tweet_database %>%
-      dcast(last_name+party~"total_tweets", value.var = "tweet_exists", fun.aggregate = sum)
-    
     # replace total mentions with the mentions per number of tweet
+    issue_data$total_tweets <- tweet_counts$total_tweets
     issue_data$scaled_mentions <- issue_data$total_mentions/tweet_counts$total_tweets
   }
+  # return the pivoted dataframe
+  return(issue_data)
+}
+
+#' Plot informative analytic data on the Twitter search.
+#' @param issue_terms Search term or terms. Takes input as a vector. 
+#' @param tweet_database Tweet database. Must have the columns "last_name", "party", "state" and "tweet".
+##' @export
+
+twitter_analysis <- function(issue_terms, tweet_database){
+  issue_data <- pivot_twitter_data(issue_terms, tweet_database, scale_by_total=TRUE)
+  issue_data <- issue_data[order(issue_data$scaled_mentions, decreasing = TRUE),]
+  
+  party_pivot <- join(
+    dcast(issue_data, party ~ "total_mentions", value.var="total_mentions", fun.aggregate=sum),
+    dcast(issue_data, party ~ "total_tweets", value.var="total_tweets", fun.aggregate=sum)
+  )
+  party_pivot$pct_mentions <- paste0(round(party_pivot$total_mentions/party_pivot$total_tweets*100,1),"%")
+  
+  message(paste0("There were a total of ", sum(party_pivot$total_mentions), " mentions of the term(s)"))
+  message(paste0("- Democrats mentioned these terms ", party_pivot[party_pivot$party == "D", ]$total_mentions, " times, ", party_pivot[party_pivot$party == "D", ]$pct_mentions," of all tweets from a Democrata."))
+  message(paste0("- Republicans mentioned these terms ", party_pivot[party_pivot$party == "R", ]$total_mentions, " times, ", party_pivot[party_pivot$party == "R", ]$pct_mentions," of all tweets from a Republicans."))
+  message(paste0("- Independents Sanders & King mentioned these terms ", party_pivot[party_pivot$party == "I", ]$total_mentions, " times, ", party_pivot[party_pivot$party == "I", ]$pct_mentions," of all tweets from Independents."))
+  message(paste0("- Senators, in order of support: \n\n", paste0(paste0(issue_data$last_name, " (", issue_data$total_mentions, " - ", round(issue_data$scaled_mentions*100,1), "%)"), collapse = ", ")))
+}
+
+#' Plot Data for Progress specified tweet graphs.
+#' @param issue_terms Search term or terms. Takes input as a vector. 
+#' @param tweet_database Tweet database. Must have the columns "last_name", "party", "state" and "tweet".
+#' @param scale_by_total Scale your graph by all tweets by the Senator. Defaults to FALSE, which outputs tweet counts.
+#' @param save_local Save the graph to your working directory. Defaults to FALSE.
+#' @export
+
+issue_bargraph <- function(issue_terms, tweet_database, scale_by_total=FALSE, save_local=FALSE) { 
+  
+  issue_data <- pivot_twitter_data(issue_terms, tweet_database, scale_by_total)
   
   # change the last names 
   issue_data$last_name <- paste0(toupper(issue_data$last_name), " (", issue_data$party, "-", issue_data$state, ")")
   issue_data$last_name <- issue_data$last_name %>%
     factor(levels = issue_data$last_name[order(issue_data$party, if(scale_by_total){issue_data$scaled_mentions}else{issue_data$total_mentions})])
-
+  
   # save the tweet graph
   tweet_graph <- ggplot(data = issue_data, aes(x=last_name, y=if(scale_by_total){issue_data$scaled_mentions}else{issue_data$total_mentions}, fill=party)) +
     geom_bar(stat="identity", width = 1)+ 

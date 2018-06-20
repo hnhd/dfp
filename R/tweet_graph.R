@@ -3,7 +3,7 @@
 #' @param tweet_database Tweet database. Must have the columns "last_name", "party", "state" and "tweet".
 #' @param scale_by_total Scale your graph by all tweets by the Senator. Defaults to FALSE, which outputs tweet counts.
 
-pivot_twitter_data <- function(issue_terms, tweet_database, scale_by_total=FALSE){
+pivot_twitter_data <- function(tweet_database, issue_terms, scale_by_total=FALSE){
   
   # add a flag to mark if the tweet exists (used to scale by total)
   tweet_database$tweet_exists <- TRUE
@@ -42,7 +42,7 @@ pivot_twitter_data <- function(issue_terms, tweet_database, scale_by_total=FALSE
 #' @param tweet_database Tweet database. Must have the columns "last_name", "party", "state" and "tweet".
 ##' @export
 
-twitter_analysis <- function(issue_terms, tweet_database){
+issue_analysis <- function(tweet_database, issue_terms){
   issue_data <- pivot_twitter_data(issue_terms, tweet_database, scale_by_total=TRUE)
   issue_data <- issue_data[order(issue_data$scaled_mentions, decreasing = TRUE),]
   
@@ -66,7 +66,7 @@ twitter_analysis <- function(issue_terms, tweet_database){
 #' @param save_local Save the graph to your working directory. Defaults to FALSE.
 #' @export
 
-issue_bargraph <- function(issue_terms, tweet_database, scale_by_total=FALSE, save_local=FALSE) { 
+issue_bargraph <- function(tweet_database, issue_terms, scale_by_total=FALSE, save_local=FALSE) { 
   
   issue_data <- pivot_twitter_data(issue_terms, tweet_database, scale_by_total)
   

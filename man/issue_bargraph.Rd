@@ -4,13 +4,13 @@
 \alias{issue_bargraph}
 \title{Plot Data for Progress specified tweet graphs.}
 \usage{
-issue_bargraph(issue_terms, tweet_database, scale_by_total = FALSE,
+issue_bargraph(tweet_database, issue_terms, scale_by_total = FALSE,
   save_local = FALSE)
 }
 \arguments{
-\item{issue_terms}{Search term or terms. Takes input as a vector.}
-
 \item{tweet_database}{Tweet database. Must have the columns "last_name", "party", "state" and "tweet".}
+
+\item{issue_terms}{Search term or terms. Takes input as a vector.}
 
 \item{scale_by_total}{Scale your graph by all tweets by the Senator. Defaults to FALSE, which outputs tweet counts.}
 

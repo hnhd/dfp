@@ -4,12 +4,12 @@
 \alias{pivot_twitter_data}
 \title{Pivot the Twitter data.}
 \usage{
-pivot_twitter_data(issue_terms, tweet_database, scale_by_total = FALSE)
+pivot_twitter_data(tweet_database, issue_terms, scale_by_total = FALSE)
 }
 \arguments{
-\item{issue_terms}{Search term or terms. Takes input as a vector.}
-
 \item{tweet_database}{Tweet database. Must have the columns "last_name", "party", "state" and "tweet".}
+
+\item{issue_terms}{Search term or terms. Takes input as a vector.}
 
 \item{scale_by_total}{Scale your graph by all tweets by the Senator. Defaults to FALSE, which outputs tweet counts.}
 }

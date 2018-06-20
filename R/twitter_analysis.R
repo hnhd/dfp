@@ -43,7 +43,7 @@ pivot_twitter_data <- function(tweet_database, issue_terms, scale_by_total=FALSE
 ##' @export
 
 issue_analysis <- function(tweet_database, issue_terms){
-  issue_data <- pivot_twitter_data(issue_terms, tweet_database, scale_by_total=TRUE)
+  issue_data <- pivot_twitter_data(tweet_database, issue_terms, scale_by_total=TRUE)
   issue_data <- issue_data[order(issue_data$scaled_mentions, decreasing = TRUE),]
   
   party_pivot <- join(
@@ -68,7 +68,7 @@ issue_analysis <- function(tweet_database, issue_terms){
 
 issue_bargraph <- function(tweet_database, issue_terms, scale_by_total=FALSE, save_local=FALSE) { 
   
-  issue_data <- pivot_twitter_data(issue_terms, tweet_database, scale_by_total)
+  issue_data <- pivot_twitter_data(tweet_database, issue_terms, scale_by_total)
   
   # change the last names 
   issue_data$last_name <- paste0(toupper(issue_data$last_name), " (", issue_data$party, "-", issue_data$state, ")")

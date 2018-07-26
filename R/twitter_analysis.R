@@ -52,8 +52,8 @@ issue_analysis <- function(tweet_database, issue_terms){
   )
   party_pivot$pct_mentions <- paste0(round(party_pivot$total_mentions/party_pivot$total_tweets*100,1),"%")
   
-  message(paste0("There were a total of ", sum(party_pivot$total_mentions), " mentions of the term(s)"))
-  message(paste0("- Democrats mentioned these terms ", party_pivot[party_pivot$party == "D", ]$total_mentions, " times, ", party_pivot[party_pivot$party == "D", ]$pct_mentions," of all tweets from a Democrata."))
+  message(paste0("There were a total of ", sum(party_pivot$total_mentions), " mentions of the term(s): ", paste0("'",paste0(issue_terms, collapse = "', '"), "'")))
+  message(paste0("- Democrats mentioned these terms ", party_pivot[party_pivot$party == "D", ]$total_mentions, " times, ", party_pivot[party_pivot$party == "D", ]$pct_mentions," of all tweets from a Democrats."))
   message(paste0("- Republicans mentioned these terms ", party_pivot[party_pivot$party == "R", ]$total_mentions, " times, ", party_pivot[party_pivot$party == "R", ]$pct_mentions," of all tweets from a Republicans."))
   message(paste0("- Independents Sanders & King mentioned these terms ", party_pivot[party_pivot$party == "I", ]$total_mentions, " times, ", party_pivot[party_pivot$party == "I", ]$pct_mentions," of all tweets from Independents."))
   message(paste0("- Senators, in order of support: \n\n", paste0(paste0(issue_data$last_name, " (", issue_data$total_mentions, " - ", round(issue_data$scaled_mentions*100,1), "%)"), collapse = ", ")))

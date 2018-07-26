@@ -118,7 +118,7 @@ usa_dfp_map <- function(
   }else if(color_scheme=="red_to_blue"){
     color_scheme_values=c("#d65454","#FFFFFF","#3989cb")
   }else if(color_scheme=="greyscale"){
-    color_scheme_values=c("#FFFFFF","#cccccc","#404040")
+    color_scheme_values=c("#FFFFFF","#999999","#333333")
   }
   
   # if there is an overflow, choose overflow colors & provide informative warnings
